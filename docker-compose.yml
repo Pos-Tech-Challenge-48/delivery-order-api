@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  delivery-order-api:
+    container_name: delivery-order-api
+    build:
+      context: .
+      target: dev
+      dockerfile: Dockerfile.dev
+    env_file:
+      - .env
+    volumes:
+      - .:/app:rw,delegated
+    networks:
+      - delivery-order-network
+    ports:
+      - 8081:8081
+      - 2345:2345
+  postgresql-order-db:
+    profiles:
+    - "db"
+    - "full"
+    container_name: postgresql-order-db
+    image: postgres:16.1
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+      - PGPORT=${DBDEV_PORT}
+
+    networks:
+      - delivery-order-network
+    ports:
+      - ${DBDEV_PORT}:${DBDEV_PORT}
+    volumes:
+      - postgresql-order-db:/var/lib/postgresql/data
+
+volumes:
+  postgresql-order-db:
+
+networks:
+  delivery-order-network:
+    name: delivery-order-network
