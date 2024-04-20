@@ -108,4 +108,4 @@ swag init -g ./cmd/api/main.go -o ./cmd/api/docs --parseDependency
 
 ### Kubernetes
 
-A documentação do kubernetes pode ser acessada [aqui](https://github.com/Pos-Tech-Challenge-48/delivery-api/tree/main/kubernetes).
+A documentação do kubernetes pode ser acessada [aqui](https://github.com/Pos-Tech-Challenge-48/delivery-order-api/tree/main/kubernetes).

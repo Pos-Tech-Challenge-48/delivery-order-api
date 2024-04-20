@@ -3,7 +3,7 @@ module github.com/Pos-Tech-Challenge-48/delivery-order-api
 go 1.22.0
 
 require (
-	github.com/Pos-Tech-Challenge-48/delivery-api v1.0.8
+	github.com/aws/aws-sdk-go v1.51.21
 	github.com/gin-gonic/gin v1.9.1
 	github.com/golang-migrate/migrate/v4 v4.17.0
 	github.com/google/uuid v1.6.0
@@ -11,7 +11,8 @@ require (
 	github.com/klassmann/cpfcnpj v0.0.0-20200907140233-a595c5fd8de1
 	github.com/lib/pq v1.10.9
 	github.com/stretchr/testify v1.8.4
-	go.uber.org/mock v0.3.0
+	go.uber.org/mock v0.4.0
+	golang.org/x/text v0.14.0
 )
 
 require (
@@ -28,6 +29,7 @@ require (
 	github.com/google/go-cmp v0.5.9 // indirect
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/hashicorp/go-multierror v1.1.1 // indirect
+	github.com/jmespath/go-jmespath v0.4.0 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/klauspost/cpuid/v2 v2.2.5 // indirect
 	github.com/leodido/go-urn v1.2.4 // indirect
@@ -44,7 +46,7 @@ require (
 	golang.org/x/mod v0.14.0 // indirect
 	golang.org/x/net v0.18.0 // indirect
 	golang.org/x/sys v0.15.0 // indirect
-	golang.org/x/text v0.14.0 // indirect
+	golang.org/x/tools v0.13.0 // indirect
 	google.golang.org/protobuf v1.31.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )

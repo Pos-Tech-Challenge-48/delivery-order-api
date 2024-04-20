@@ -9,10 +9,10 @@ stop-dev:
 	docker compose --profile full down
 
 build-prod:
-	docker build -t delivery-api:prod .
+	docker build -t delivery-order-api:prod .
 
 run-prod:
-	docker run --env-file .env  delivery-api:prod
+	docker run --env-file .env  delivery-order-api:prod
 
 local-install:
 	go install -tags 'postgres' github.com/golang-migrate/migrate/v4/cmd/migrate@latest

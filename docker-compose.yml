@@ -1,6 +1,27 @@
 version: '3.8'
 
 services:
+  localstack:
+    profiles:
+    - "aws"
+    - "full"
+    container_name: delivery-localstack
+    image: localstack/localstack:3.2.0
+    environment:
+      AWS_DEFAULT_REGION: us-east-1
+      AWS_ACCESS_KEY_ID: test
+      AWS_SECRET_ACCESS_KEY: test
+      EDGE_PORT: 4570
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4570/_localstack/health"]
+      interval: 1s
+      timeout: 1s
+      retries: 15
+    ports:
+      - '4566-4597:4566-4597'
+    networks:
+      - delivery-order-network
+
   delivery-order-api:
     container_name: delivery-order-api
     build:
@@ -16,6 +37,7 @@ services:
     ports:
       - 8081:8081
       - 2345:2345
+
   postgresql-order-db:
     profiles:
     - "db"
