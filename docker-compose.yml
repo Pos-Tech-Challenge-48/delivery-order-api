@@ -11,9 +11,9 @@ services:
       AWS_DEFAULT_REGION: us-east-1
       AWS_ACCESS_KEY_ID: test
       AWS_SECRET_ACCESS_KEY: test
-      EDGE_PORT: 4570
+      EDGE_PORT: 4566
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:4570/_localstack/health"]
+      test: ["CMD", "curl", "-f", "http://localhost:4566/_localstack/health"]
       interval: 1s
       timeout: 1s
       retries: 15

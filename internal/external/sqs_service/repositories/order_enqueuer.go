@@ -33,8 +33,9 @@ func (c *OrderEnqueuerRepository) SendPendingPaymentOrderMessageToQueue(ctx cont
 	}
 
 	_, err = c.queueClient.SQSClient.SendMessage(&sqs.SendMessageInput{
-		MessageBody: aws.String(string(body)),
-		QueueUrl:    aws.String(queue.URL),
+		MessageBody:    aws.String(string(body)),
+		QueueUrl:       aws.String(queue.URL),
+		MessageGroupId: aws.String("custom-event"),
 	})
 
 	if err != nil {
