@@ -19,7 +19,9 @@ func Test_OrderCreator(t *testing.T) {
 		input         *entities.Order
 		expectedError error
 		executeMock   func(input *entities.Order, m *orderrepositorymock.MockOrderRepository,
-			pm *productrepositorymock.MockProductRepository)
+			pm *productrepositorymock.MockProductRepository,
+			orderenqueuer *orderrepositorymock.MockOrderQueueRepository,
+		)
 	}{
 		{
 			name:          "Should create order with success",
@@ -37,9 +39,14 @@ func Test_OrderCreator(t *testing.T) {
 					},
 				},
 			},
-			executeMock: func(input *entities.Order, m *orderrepositorymock.MockOrderRepository, pm *productrepositorymock.MockProductRepository) {
-				m.EXPECT().Save(gomock.Any(), gomock.Any()).Return(nil)
+			executeMock: func(input *entities.Order,
+				m *orderrepositorymock.MockOrderRepository,
+				pm *productrepositorymock.MockProductRepository,
+				orderenqueuer *orderrepositorymock.MockOrderQueueRepository) {
+				// query for product to calculate ammout
 				pm.EXPECT().GetByID(gomock.Any(), gomock.Any()).Return(&entities.Product{}, nil).MaxTimes(2)
+				m.EXPECT().Save(gomock.Any(), gomock.Any()).Return(nil)
+				orderenqueuer.EXPECT().SendPendingPaymentOrderMessageToQueue(gomock.Any(), gomock.Any()).Return(nil)
 			},
 		},
 	}
@@ -54,7 +61,7 @@ func Test_OrderCreator(t *testing.T) {
 			productRepositoryMock := productrepositorymock.NewMockProductRepository(ctrl)
 			NewMockOrderQueueRepository := orderrepositorymock.NewMockOrderQueueRepository(ctrl)
 
-			tt.executeMock(tt.input, OrderRepositoryMock, productRepositoryMock)
+			tt.executeMock(tt.input, OrderRepositoryMock, productRepositoryMock, NewMockOrderQueueRepository)
 
 			OrderCreator := ordercreator.NewOrderCreator(OrderRepositoryMock, productRepositoryMock, NewMockOrderQueueRepository)
 
