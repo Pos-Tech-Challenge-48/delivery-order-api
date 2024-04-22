@@ -22,3 +22,7 @@ setup-dev:
 
 migrate-down:
 	migrate -database ${POSTGRESQL_URL_PUBLIC} -path db/migrations down
+
+
+test-report:
+	go test ./... -v -cover  -coverprofile=c.out && go tool cover -html=c.out
