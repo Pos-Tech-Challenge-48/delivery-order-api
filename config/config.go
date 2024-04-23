@@ -2,7 +2,6 @@ package config
 
 import (
 	"errors"
-	"fmt"
 	"os"
 	"strconv"
 	"time"
@@ -57,7 +56,6 @@ func LoadConfig() (*Config, error) {
 	}
 
 	pgsqlConfig := postgresqlDBConfig{ConnectionString: os.Getenv("POSTGRESQL_URL")}
-	fmt.Printf("ENV do banco %s", pgsqlConfig)
 
 	// SQS
 	SessionMaxRetries, _ := strconv.Atoi(os.Getenv("SESSION_MAX_RETRIES"))
