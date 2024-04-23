@@ -34,6 +34,7 @@ type SQSConfig struct {
 
 	// QUEUES
 	QueuePaymentsConfirmation string
+	QueueOrderProduction      string
 }
 
 type Config struct {
@@ -75,6 +76,7 @@ func LoadConfig() (*Config, error) {
 		VisibilityTimeout: VisibilityTimeout,
 
 		QueuePaymentsConfirmation: os.Getenv("SQS_PAYMENTS_CONFIRMATION_QUEUE"),
+		QueueOrderProduction:      os.Getenv("SQS_ORDER_PRODUCTION_QUEUE"),
 	}
 
 	config := Config{DBConfig: pgsqlConfig, SQSConfig: SQSConfig, Environment: environ}

@@ -9,11 +9,13 @@ import (
 
 type OrderUpdater struct {
 	orderRepository interfaces.OrderRepository
+	orderEnqueuer   interfaces.OrderQueueRepository
 }
 
-func NewOrderUpdater(orderRepository interfaces.OrderRepository) *OrderUpdater {
+func NewOrderUpdater(orderRepository interfaces.OrderRepository, orderEnqueuer interfaces.OrderQueueRepository) *OrderUpdater {
 	return &OrderUpdater{
 		orderRepository: orderRepository,
+		orderEnqueuer:   orderEnqueuer,
 	}
 }
 
@@ -35,8 +37,17 @@ func (p *OrderUpdater) Update(ctx context.Context, order *entities.Order) error 
 		return err
 	}
 
+	shouldEnqueue := p.validateForEnqueueMessage(existingOrder)
+	if shouldEnqueue {
+		p.orderEnqueuer.SendOrderToProductionQueue(ctx, existingOrder)
+	}
+
 	return nil
 
+}
+
+func (p *OrderUpdater) validateForEnqueueMessage(order *entities.Order) bool {
+	return order.Status == "Pago"
 }
 
 func (p *OrderUpdater) validateOrderForUpdating(order *entities.Order) error {

@@ -22,9 +22,34 @@ func NewOrderEnqueuerRepository(sqsClient *sqs_service.Client) *OrderEnqueuerRep
 }
 
 func (c *OrderEnqueuerRepository) SendPendingPaymentOrderMessageToQueue(ctx context.Context, data *entities.Order) error {
-	const operation = "SQS.Enqueue.SendMessageToQueue"
+	const operation = "SQS.Enqueue.SendPendingPaymentOrderMessageToQueue"
 
 	queue := c.queueClient.Queues.OrderPaymentConfirmationQueue
+
+	body, err := json.Marshal(data)
+
+	if err != nil {
+		return fmt.Errorf("%s -> %w", operation, err)
+	}
+
+	_, err = c.queueClient.SQSClient.SendMessage(&sqs.SendMessageInput{
+		MessageBody:    aws.String(string(body)),
+		QueueUrl:       aws.String(queue.URL),
+		MessageGroupId: aws.String("custom-event"),
+	})
+
+	if err != nil {
+		return fmt.Errorf("%s -> failed to send message: %w", operation, err)
+	}
+
+	return nil
+
+}
+
+func (c *OrderEnqueuerRepository) SendOrderToProductionQueue(ctx context.Context, data *entities.Order) error {
+	const operation = "SQS.Enqueue.SendOrderToProductionQueue"
+
+	queue := c.queueClient.Queues.OrderProductionQueue
 
 	body, err := json.Marshal(data)
 

@@ -44,10 +44,6 @@ func (o *Order) Validate() error {
 	return nil
 }
 
-func (o *Order) IsReadyToPayment() bool {
-	return o.Status == "Recebido"
-}
-
 func (o *Order) IsFinished() bool {
 	return o.Status == "Finalizado"
 }

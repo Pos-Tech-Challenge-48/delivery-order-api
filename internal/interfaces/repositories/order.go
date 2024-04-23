@@ -17,4 +17,5 @@ type OrderRepository interface {
 
 type OrderQueueRepository interface {
 	SendPendingPaymentOrderMessageToQueue(ctx context.Context, order *entities.Order) error
+	SendOrderToProductionQueue(ctx context.Context, order *entities.Order) error
 }

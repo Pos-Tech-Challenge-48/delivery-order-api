@@ -17,6 +17,7 @@ import (
 
 type Queues struct {
 	OrderPaymentConfirmationQueue SQSQueue
+	OrderProductionQueue          SQSQueue
 }
 
 type Client struct {
@@ -61,26 +62,33 @@ func New(ctx context.Context, cfg config.SQSConfig, env config.Environment) (*Cl
 }
 
 func (c *Client) setupQueues() error {
-
-	// Payments Confirmation Queue
-	paymentConfirmationQueue := &SQSQueue{
-		Name: c.cfg.QueuePaymentsConfirmation,
-	}
-
-	createQueueInformation, err := c.SQSClient.CreateQueue(&sqs.CreateQueueInput{
-		QueueName: aws.String(paymentConfirmationQueue.Name),
-		Attributes: map[string]*string{
-			"FifoQueue":                 aws.String(strconv.FormatBool(strings.HasSuffix(paymentConfirmationQueue.Name, ".fifo"))),
-			"ContentBasedDeduplication": aws.String("true"),
+	queueList := map[string]*SQSQueue{
+		"paymentConfimation": {
+			Name: c.cfg.QueuePaymentsConfirmation,
 		},
-	})
-
-	if err != nil {
-		return fmt.Errorf("error creating queue: %w", err)
+		"orderProduction": {
+			Name: c.cfg.QueueOrderProduction,
+		},
 	}
 
-	paymentConfirmationQueue.URL = *createQueueInformation.QueueUrl
-	c.Queues.OrderPaymentConfirmationQueue = *paymentConfirmationQueue
+	for _, queue := range queueList {
+		createQueueInformation, err := c.SQSClient.CreateQueue(&sqs.CreateQueueInput{
+			QueueName: aws.String(queue.Name),
+			Attributes: map[string]*string{
+				"FifoQueue":                 aws.String(strconv.FormatBool(strings.HasSuffix(queue.Name, ".fifo"))),
+				"ContentBasedDeduplication": aws.String("true"),
+			},
+		})
+
+		if err != nil {
+			return fmt.Errorf("error creating queue: %w", err)
+		}
+
+		queue.URL = *createQueueInformation.QueueUrl
+	}
+
+	c.Queues.OrderPaymentConfirmationQueue = *queueList["paymentConfimation"]
+	c.Queues.OrderProductionQueue = *queueList["orderProduction"]
 
 	return nil
 }

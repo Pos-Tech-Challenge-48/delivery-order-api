@@ -131,6 +131,20 @@ func (m *MockOrderQueueRepository) EXPECT() *MockOrderQueueRepositoryMockRecorde
 	return m.recorder
 }
 
+// SendOrderToProductionQueue mocks base method.
+func (m *MockOrderQueueRepository) SendOrderToProductionQueue(ctx context.Context, order *entities.Order) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "SendOrderToProductionQueue", ctx, order)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// SendOrderToProductionQueue indicates an expected call of SendOrderToProductionQueue.
+func (mr *MockOrderQueueRepositoryMockRecorder) SendOrderToProductionQueue(ctx, order interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SendOrderToProductionQueue", reflect.TypeOf((*MockOrderQueueRepository)(nil).SendOrderToProductionQueue), ctx, order)
+}
+
 // SendPendingPaymentOrderMessageToQueue mocks base method.
 func (m *MockOrderQueueRepository) SendPendingPaymentOrderMessageToQueue(ctx context.Context, order *entities.Order) error {
 	m.ctrl.T.Helper()

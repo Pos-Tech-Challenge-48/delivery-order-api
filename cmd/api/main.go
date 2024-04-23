@@ -86,7 +86,7 @@ func main() {
 	orderGetter := ordergetter.NewOrderGetter(orderRepository, productRepository)
 	orderGetterHandler := ordergetterhandler.NewOrderGetterHandler(orderGetter)
 
-	orderUpdater := orderupdater.NewOrderUpdater(orderRepository)
+	orderUpdater := orderupdater.NewOrderUpdater(orderRepository, orderEnqueuerRepository)
 	orderUpdaterHandler := orderupdatehandler.NewOrderUpdaterHandler(orderUpdater)
 
 	app := gin.Default()
@@ -96,11 +96,11 @@ func main() {
 		CustomerGetterHandler:  customerGetterHandler.Handle,
 		OrderCreatorHandler:    orderCreatorHandler.Handle,
 		OrderGetterHandler:     orderGetterHandler.Handle,
+		OrderUpdaterHandler:    orderUpdaterHandler.Handle,
 		ProductCreatorHandler:  productCreatorHandler.Handle,
 		ProductDeleteHandler:   productDeleteHandler.Handle,
 		ProductUpdateHandler:   productUpdateHandler.Handle,
 		ProductGetterHandler:   productGetterHandler.Handle,
-		OrderUpdaterHandler:    orderUpdaterHandler.Handle,
 	}
 
 	router.Register(app)
