@@ -39,11 +39,13 @@ func (p *OrderUpdater) Update(ctx context.Context, order *entities.Order) error 
 
 	shouldEnqueue := p.validateForEnqueueMessage(existingOrder)
 	if shouldEnqueue {
-		p.orderEnqueuer.SendOrderToProductionQueue(ctx, existingOrder)
+		err := p.orderEnqueuer.SendOrderToProductionQueue(ctx, existingOrder)
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
-
 }
 
 func (p *OrderUpdater) validateForEnqueueMessage(order *entities.Order) bool {

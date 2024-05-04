@@ -35,7 +35,7 @@ func (m *MockOrderRepository) EXPECT() *MockOrderRepositoryMockRecorder {
 	return m.recorder
 }
 
-// GetAll mocks base method. 
+// GetAll mocks base method.
 func (m *MockOrderRepository) GetAll(ctx context.Context) ([]entities.Order, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetAll", ctx)
