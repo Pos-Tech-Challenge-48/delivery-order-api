@@ -37,7 +37,7 @@ func (o *OrderGetterHandler) Handle(c *gin.Context) {
 	list, err := o.OrderGetterUseCase.GetAll(ctx, sortBy)
 
 	if err != nil {
-		c.JSON(http.StatusOK, gin.H{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
