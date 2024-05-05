@@ -83,5 +83,3 @@ func Test_OrderGetter_Handler(t *testing.T) {
 		})
 	}
 }
-
-// temos que verificar aqui o que é o order getter test
