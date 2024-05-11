@@ -55,7 +55,7 @@ func New(ctx context.Context, cfg config.SQSConfig, env config.Environment) (*Cl
 
 	client := &Client{sqsClient, cfg, Queues{}}
 
-	err = client.setupQueues()
+	err = client.setupQueues(ctx, env)
 	if err != nil {
 		return nil, fmt.Errorf("error %s: %w", operation, err)
 	}
@@ -66,7 +66,7 @@ func New(ctx context.Context, cfg config.SQSConfig, env config.Environment) (*Cl
 // não vai funcionar, o certo aqui vai ser pegar o arn da fila
 // TODO: refazer isso daqui
 
-func (c *Client) setupQueues(ctx context.Context, env config.Environment) error {
+func (c *Client) setupQueues(_ context.Context, env config.Environment) error {
 	queueList := map[string]*SQSQueue{
 		"paymentConfimation": {
 			Name: c.cfg.QueuePaymentsConfirmation,
@@ -152,7 +152,7 @@ func (c *Client) getQueueURL(name string) (*string, error) {
 	})
 	if err != nil {
 		log.Printf("error getting queue URL -> %v\n", err)
-		return nil, fmt.Errorf("error getting queue URL -> %w", name, err)
+		return nil, fmt.Errorf("error getting queuev (%s) URL -> %w", name, err)
 	}
 
 	return output.QueueUrl, nil
