@@ -82,7 +82,7 @@ jobs:
                 spec:
                   containers:
                     - name: delivery-api-container
-                      image: ${{ECR_REGISTRY}}/${{ECR_REPOSITORY}}:${{IMAGE_TAG}}
+                      image: ${ECR_REGISTRY}/${ECR_REPOSITORY}:${IMAGE_TAG}
                       ports:
                         - containerPort: 8080
                       livenessProbe:
