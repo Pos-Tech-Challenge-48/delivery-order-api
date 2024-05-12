@@ -55,8 +55,8 @@ jobs:
             data:
               POSTGRESQL_URL: ${{ secrets.POSTGRESQL_URL }}
               ENVIRONMENT: production
-              SQS_PAYMENTS_CONFIRMATION_QUEUE=cs_payments_confirmation_0.fifo
-              SQS_ORDER_PRODUCTION_QUEUE=cs_order_production_0.fifo
+              SQS_PAYMENTS_CONFIRMATION_QUEUE: cs_payments_confirmation_0.fifo
+              SQS_ORDER_PRODUCTION_QUEUE: cs_order_production_0.fifo
       - name: Write File
         uses: 1arp/create-a-file-action@0.4.4
         env:
