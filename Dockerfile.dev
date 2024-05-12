@@ -1,5 +1,5 @@
 # Dockerfile config for development environment
-FROM golang:1.21.0 as base
+FROM golang:1.22.0-bookworm as base
 
 WORKDIR /app
 

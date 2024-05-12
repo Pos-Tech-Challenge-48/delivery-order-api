@@ -1,4 +1,4 @@
-FROM golang:1.21-alpine
+FROM golang:1.22.0-bookworm
 
 # Create an unprivileged user. https://stackoverflow.com/a/49955098/2387190
 RUN adduser -D -H -h "/nonexistent" -s "/sbin/nologin" -g "" -u "10001" "appuser"
