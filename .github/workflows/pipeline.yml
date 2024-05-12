@@ -82,7 +82,7 @@ jobs:
                 spec:
                   containers:
                     - name: delivery-api-container
-                      image: ${ECR_REGISTRY}/${ECR_REPOSITORY}:${IMAGE_TAG}
+                      image: 399351524471.dkr.ecr.us-east-1.amazonaws.com/delivery-order-api:teste
                       ports:
                         - containerPort: 8080
                       livenessProbe:
