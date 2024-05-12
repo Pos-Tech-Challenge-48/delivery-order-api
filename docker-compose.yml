@@ -1,0 +1,67 @@
+version: '3.8'
+
+services:
+  localstack:
+    profiles:
+    - "aws"
+    - "full"
+    container_name: delivery-localstack
+    image: localstack/localstack:3.2.0
+    environment:
+      AWS_DEFAULT_REGION: us-east-1
+      AWS_ACCESS_KEY_ID: test
+      AWS_SECRET_ACCESS_KEY: test
+      EDGE_PORT: 4566
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4566/_localstack/health"]
+      interval: 1s
+      timeout: 1s
+      retries: 15
+    ports:
+      - '4566-4597:4566-4597'
+    networks:
+      - delivery-order-network
+
+  delivery-order-api:
+    container_name: delivery-order-api
+    build:
+      context: .
+      target: dev
+      dockerfile: Dockerfile.dev
+    env_file:
+      - .env
+    volumes:
+      - .:/app:rw,delegated
+    networks:
+      - delivery-order-network
+    ports:
+      - 8081:8081
+      - 2345:2345
+
+  postgresql-order-db:
+    profiles:
+    - "db"
+    - "full"
+    container_name: postgresql-order-db
+    image: postgres:16.1
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+      - PGPORT=${DBDEV_PORT}
+
+    networks:
+      - delivery-order-network
+    ports:
+      - ${DBDEV_PORT}:${DBDEV_PORT}
+    volumes:
+      - postgresql-order-db:/var/lib/postgresql/data
+
+volumes:
+  postgresql-order-db:
+
+networks:
+  delivery-order-network:
+    name: delivery-order-network

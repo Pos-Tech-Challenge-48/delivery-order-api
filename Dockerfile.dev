@@ -1,0 +1,25 @@
+# Dockerfile config for development environment
+FROM golang:1.21.0 as base
+
+WORKDIR /app
+
+ENV GO111MODULE="on"
+ENV GOOS="linux"
+ENV CGO_ENABLED=0
+
+COPY . .
+
+RUN go install github.com/cosmtrek/air@latest
+RUN go install github.com/go-delve/delve/cmd/dlv@latest
+RUN go mod tidy
+
+
+FROM base AS dev
+
+WORKDIR /app
+
+EXPOSE 8080
+EXPOSE 8081
+EXPOSE 2345
+
+ENTRYPOINT ["air"]
