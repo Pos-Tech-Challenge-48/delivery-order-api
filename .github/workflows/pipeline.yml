@@ -62,7 +62,8 @@ jobs:
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: "delivery-api"
-          IMAGE_TAG: ${{github.ref_name}}
+          # IMAGE_TAG: ${{github.ref_name}}
+          IMAGE_TAG: teste
         with:
           path: ./kubernetes/api/api-deployment.yaml
           content: | 
@@ -116,6 +117,16 @@ jobs:
                           configMapKeyRef:
                             name: api-config
                             key: POSTGRESQL_URL
+                      - name: SQS_PAYMENTS_CONFIRMATION_QUEUE
+                        valueFrom:
+                          configMapKeyRef:
+                            name: api-config
+                            key: SQS_PAYMENTS_CONFIRMATION_QUEUE
+                      - name: SQS_ORDER_PRODUCTION_QUEUE
+                        valueFrom:
+                          configMapKeyRef:
+                            name: api-config
+                            key: SQS_ORDER_PRODUCTION_QUEUE
               replicas: 1
               selector:
                 matchLabels:
