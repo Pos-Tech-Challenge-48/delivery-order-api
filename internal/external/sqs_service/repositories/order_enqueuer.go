@@ -21,12 +21,24 @@ func NewOrderEnqueuerRepository(sqsClient *sqs_service.Client) *OrderEnqueuerRep
 	}
 }
 
+func (c *OrderEnqueuerRepository) FormatOrderMessage(_ context.Context, data *entities.Order) (*OrderMessageDTO, error) {
+	return &OrderMessageDTO{
+		OrderId:          data.ID,
+		OrderStatus:      data.Status,
+		Amount:           data.Amount,
+		CreatedDate:      data.CreatedDate,
+		LastModifiedDate: data.LastModifiedDate,
+	}, nil
+}
+
 func (c *OrderEnqueuerRepository) SendPendingPaymentOrderMessageToQueue(ctx context.Context, data *entities.Order) error {
 	const operation = "SQS.Enqueue.SendPendingPaymentOrderMessageToQueue"
 
 	queue := c.queueClient.Queues.OrderPaymentConfirmationQueue
 
-	body, err := json.Marshal(data)
+	orderMessage, _ := c.FormatOrderMessage(ctx, data)
+
+	body, err := json.Marshal(orderMessage)
 
 	if err != nil {
 		return fmt.Errorf("%s -> %w", operation, err)

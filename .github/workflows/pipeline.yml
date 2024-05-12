@@ -1,0 +1,129 @@
+name: 🚀 Build and Deploy
+run-name: 🌴 ${{ github.ref_name }} | ${{ github.event.inputs.environment }} | Deploying...
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  deploy:
+    name: 📦 Building ${{ github.ref_name }}...
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Push image to Amazon ECR
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: "delivery-api"
+          IMAGE_TAG: ${{github.ref_name}}
+        run: |
+          docker build -t delivery-api:prod .
+          docker tag delivery-api:prod  $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+
+      - name: Write File
+        uses: 1arp/create-a-file-action@0.4.4
+        env:
+          POSTGRESQL_URL: ${{ secrets.POSTGRESQL_URL }}
+        with:
+          path: ./kubernetes/api/api-configmap.yaml
+          content: | 
+            apiVersion: v1
+            kind: ConfigMap
+            metadata:
+              name: api-config
+            data:
+              POSTGRESQL_URL: ${{ secrets.POSTGRESQL_URL }}
+              ENVIRONMENT: production
+
+      - name: Write File
+        uses: 1arp/create-a-file-action@0.4.4
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: "delivery-api"
+          IMAGE_TAG: ${{github.ref_name}}
+        with:
+          path: ./kubernetes/api/api-deployment.yaml
+          content: | 
+            apiVersion: apps/v1
+            kind: Deployment
+            metadata:
+              name: delivery-api
+              labels:
+                app: delivery-api
+            spec:
+              template:
+                metadata:
+                  name: delivery-api
+                  labels:
+                    app: delivery-api
+                spec:
+                  containers:
+                    - name: delivery-api-container
+                      image: $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+                      ports:
+                        - containerPort: 8080
+                      livenessProbe:
+                        httpGet:
+                          path: /healthcheck
+                          port: 8080
+                        periodSeconds: 10
+                        failureThreshold: 3
+                        initialDelaySeconds: 20
+                      readinessProbe:
+                        httpGet:
+                          path: /healthcheck
+                          port: 8080
+                        periodSeconds: 10
+                        failureThreshold: 5
+                        initialDelaySeconds: 3
+                      resources:
+                        requests:
+                          cpu: 1m
+                          memory: 512Mi
+                        limits:
+                          cpu: 1m
+                          memory: 512Mi
+                      env:
+                      - name: ENVIRONMENT
+                        valueFrom:
+                          configMapKeyRef:
+                            name: api-config
+                            key: ENVIRONMENT
+                      - name: POSTGRESQL_URL
+                        valueFrom:
+                          configMapKeyRef:
+                            name: api-config
+                            key: POSTGRESQL_URL
+              replicas: 1
+              selector:
+                matchLabels:
+                  app: delivery-api
+
+      - name: Deploy to AWS EKS
+        uses: giovannirossini/aws-eks@v1.0.1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: 'us-east-1'
+          cluster-name: 'cluster-example'
+          command: |
+            kubectl apply -f ./kubernetes/api/
+          
+        
+
+      
