@@ -140,7 +140,6 @@ jobs:
           aws-region: 'us-east-1'
           cluster-name: 'cluster-example'
           command: |
-            kubectl delete -f ./kubernetes/api/
             kubectl apply -f ./kubernetes/api/
           
         
