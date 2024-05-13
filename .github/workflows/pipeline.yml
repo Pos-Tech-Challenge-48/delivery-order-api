@@ -34,7 +34,7 @@ jobs:
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: "delivery-order-api"
-          IMAGE_TAG: teste
+          IMAGE_TAG: teste2
           # IMAGE_TAG: ${{github.ref_name}}
         run: |
           docker build -t delivery-order-api:prod .
@@ -82,7 +82,7 @@ jobs:
                 spec:
                   containers:
                     - name: delivery-api-container
-                      image: 399351524471.dkr.ecr.us-east-1.amazonaws.com/delivery-order-api:teste
+                      image: 399351524471.dkr.ecr.us-east-1.amazonaws.com/delivery-order-api:teste2
                       ports:
                         - containerPort: 8080
                       livenessProbe:
@@ -140,6 +140,7 @@ jobs:
           aws-region: 'us-east-1'
           cluster-name: 'cluster-example'
           command: |
+            kubectl delete -f ./kubernetes/api/
             kubectl apply -f ./kubernetes/api/
           
         
