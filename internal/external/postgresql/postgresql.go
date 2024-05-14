@@ -18,12 +18,12 @@ func New(config *config.Config) *sql.DB {
 
 	db, err := sql.Open("postgres", connectionString)
 	if err != nil {
-		log.Fatalln(err)
+		log.Println(err)
 	}
 
 	err = runMigrations(db)
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
 	}
 
 	return db
