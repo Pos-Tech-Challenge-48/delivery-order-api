@@ -63,7 +63,7 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: "delivery-api"
           # IMAGE_TAG: ${{github.ref_name}}
-          IMAGE_TAG: teste
+          IMAGE_TAG: teste2
         with:
           path: ./kubernetes/api/api-deployment.yaml
           content: | 
