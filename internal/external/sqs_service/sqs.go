@@ -76,8 +76,9 @@ func (c *Client) setupQueues(_ context.Context, env config.Environment) error {
 		},
 	}
 
-	if env.Name == config.EnvLocal.Name {
+	fmt.Printf("setup queues: %+v\n", queueList)
 
+	if env.Name == config.EnvLocal.Name {
 		for _, queue := range queueList {
 			createQueueInformation, err := c.SQSClient.CreateQueue(&sqs.CreateQueueInput{
 				QueueName: aws.String(queue.Name),
