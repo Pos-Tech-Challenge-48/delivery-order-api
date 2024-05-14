@@ -34,7 +34,7 @@ jobs:
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: "delivery-order-api"
-          IMAGE_TAG: teste3
+          # IMAGE_TAG: ${{github.ref_name}}
           # IMAGE_TAG: ${{github.ref_name}}
         run: |
           docker build -t delivery-order-api:prod .
@@ -63,7 +63,8 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: "delivery-api"
           # IMAGE_TAG: ${{github.ref_name}}
-          IMAGE_TAG: teste3
+          # IMAGE_TAG: ${{github.ref_name}}
+          IMAGE_TAG: teste4
         with:
           path: ./kubernetes/api/api-deployment.yaml
           content: | 
@@ -82,7 +83,7 @@ jobs:
                 spec:
                   containers:
                     - name: delivery-api-container
-                      image: 399351524471.dkr.ecr.us-east-1.amazonaws.com/delivery-order-api:teste3
+                      image: 399351524471.dkr.ecr.us-east-1.amazonaws.com/delivery-order-api:teste4
                       ports:
                         - containerPort: 8080
                       livenessProbe:
