@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"net/http"
 
@@ -36,6 +37,7 @@ import (
 
 func main() {
 	mainCtx := context.Background()
+	fmt.Print("I AM MAIN")
 
 	config, err := config.LoadConfig()
 	if err != nil {
