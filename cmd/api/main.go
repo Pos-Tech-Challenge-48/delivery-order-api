@@ -37,7 +37,7 @@ import (
 
 func main() {
 	mainCtx := context.Background()
-	fmt.Print("I AM MAIN")
+	fmt.Print("I AM MAIN 2")
 
 	config, err := config.LoadConfig()
 	if err != nil {
