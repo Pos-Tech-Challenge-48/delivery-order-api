@@ -35,9 +35,9 @@ func runMigrations(db *sql.DB) error {
 		return fmt.Errorf("ERROR creating driver instance: %w", err)
 	}
 
-	migrationsPath := "../../../migrations"
+	migrationsPath := "/migrations"
 
-	fmt.Println("db: creating migrations")
+	fmt.Printf("db: creating migrations %s \n", migrationsPath)
 
 	m, err := migrate.NewWithDatabaseInstance(
 		"file://"+migrationsPath,
