@@ -54,7 +54,7 @@ func runMigrations(db *sql.DB) error {
 		fmt.Printf("file on dir migrations: %s\n", e.Name())
 	}
 
-	migrationsPath := "migrations"
+	migrationsPath := "./migrations"
 
 	fmt.Printf("db: creating migrations %s \n", migrationsPath)
 
