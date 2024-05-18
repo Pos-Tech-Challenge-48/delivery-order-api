@@ -39,8 +39,10 @@ func New(ctx context.Context, cfg config.SQSConfig, env config.Environment) (*Cl
 
 	awsConfig := &aws.Config{MaxRetries: aws.Int(5)}
 
+	fmt.Printf("loading sqs %s :  %s", env.Name, config.EnvLocal.Name)
+	awsConfig.Region = aws.String("us-east-1")
+
 	if env.Name == config.EnvLocal.Name {
-		awsConfig.Region = aws.String("us-east-1")
 		awsConfig.Endpoint = aws.String(cfg.LocalURL)
 		awsConfig.Credentials = credentials.NewStaticCredentials("test", "test", "")
 	}
@@ -76,8 +78,9 @@ func (c *Client) setupQueues(_ context.Context, env config.Environment) error {
 		},
 	}
 
-	if env.Name == config.EnvLocal.Name {
+	fmt.Printf("setup queues: %+v\n", queueList)
 
+	if env.Name == config.EnvLocal.Name {
 		for _, queue := range queueList {
 			createQueueInformation, err := c.SQSClient.CreateQueue(&sqs.CreateQueueInput{
 				QueueName: aws.String(queue.Name),

@@ -18,12 +18,12 @@ func New(config *config.Config) *sql.DB {
 
 	db, err := sql.Open("postgres", connectionString)
 	if err != nil {
-		log.Fatalln(err)
+		log.Println(err)
 	}
 
 	err = runMigrations(db)
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
 	}
 
 	return db
@@ -35,9 +35,18 @@ func runMigrations(db *sql.DB) error {
 		return fmt.Errorf("ERROR creating driver instance: %w", err)
 	}
 
-	migrationsPath := "migrations"
+	// entries, err := os.ReadDir("internal/external/postgresql/migrations")
+	// if err != nil {
+	// 	fmt.Printf("failed ReadDir: %s\n", err)
+	// }
 
-	fmt.Println("db: creating migrations")
+	// for _, e := range entries {
+	// 	fmt.Printf("file on  dir internal/external/postgresql/migrations: %s\n", e.Name())
+	// }
+
+	migrationsPath := "internal/external/postgresql/migrations"
+
+	fmt.Printf("db: creating migrations %s \n", migrationsPath)
 
 	m, err := migrate.NewWithDatabaseInstance(
 		"file://"+migrationsPath,

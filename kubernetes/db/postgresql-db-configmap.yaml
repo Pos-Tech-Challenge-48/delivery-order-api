@@ -1,0 +1,9 @@
+# TODO: transform password in a secret
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: delivery-db-config
+data:
+  POSTGRES_USER: postech
+  POSTGRES_PASSWORD: postech
+  POSTGRES_DB: postech

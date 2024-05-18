@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"net/http"
 
@@ -36,21 +37,22 @@ import (
 
 func main() {
 	mainCtx := context.Background()
+	fmt.Print("I AM MAIN 9")
 
 	config, err := config.LoadConfig()
 	if err != nil {
-		log.Panic("error to load config", err)
+		log.Println("error to load config", err)
+
 	}
-
-	// POSTGRESQL
-	postgres := db.New(config)
-	defer postgres.Close()
-
 	// SQS
 	sqsService, err := sqs_service.New(mainCtx, config.SQSConfig, config.Environment)
 	if err != nil {
 		log.Println("error: failed to start SQS %w", err)
 	}
+
+	// POSTGRESQL
+	postgres := db.New(config)
+	defer postgres.Close()
 
 	// CUSTOMER REPOSITORY
 	customerRepository := repositories.NewCustomerRepository(postgres)
@@ -109,5 +111,5 @@ func main() {
 		c.Status(http.StatusOK)
 	})
 
-	app.Run(":8081")
+	app.Run(":8080")
 }

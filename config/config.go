@@ -2,6 +2,7 @@ package config
 
 import (
 	"errors"
+	"fmt"
 	"os"
 	"strconv"
 	"time"
@@ -51,6 +52,7 @@ func LoadConfig() (*Config, error) {
 
 	if environ.Name != EnvProduction.Name {
 		if err := godotenv.Load(); err != nil {
+			fmt.Printf("Error REASON: %v", err)
 			return nil, errors.New("error to load env")
 		}
 	}
