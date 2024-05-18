@@ -36,13 +36,13 @@ func runMigrations(db *sql.DB) error {
 		return fmt.Errorf("ERROR creating driver instance: %w", err)
 	}
 
-	entries, err := os.ReadDir("./migrations")
+	entries, err := os.ReadDir("internal/external/postgresql/migrations")
 	if err != nil {
 		fmt.Printf("failed ReadDir: %s\n", err)
 	}
 
 	for _, e := range entries {
-		fmt.Printf("file on  dir ./secrets: %s\n", e.Name())
+		fmt.Printf("file on  dir internal/external/postgresql/migrations: %s\n", e.Name())
 	}
 
 	entries, err = os.ReadDir("migrations")
