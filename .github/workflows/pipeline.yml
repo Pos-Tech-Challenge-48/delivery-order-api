@@ -60,7 +60,7 @@ jobs:
         uses: 1arp/create-a-file-action@0.4.4
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: "delivery-api"
+          ECR_REPOSITORY: "delivery-order-api"
           IMAGE_TAG: ${{github.ref_name}}
         with:
           path: ./kubernetes/api/api-deployment.yaml
