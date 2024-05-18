@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"log"
-	"os"
 
 	"github.com/Pos-Tech-Challenge-48/delivery-order-api/config"
 	"github.com/golang-migrate/migrate/v4"
@@ -36,23 +35,14 @@ func runMigrations(db *sql.DB) error {
 		return fmt.Errorf("ERROR creating driver instance: %w", err)
 	}
 
-	entries, err := os.ReadDir("internal/external/postgresql/migrations")
-	if err != nil {
-		fmt.Printf("failed ReadDir: %s\n", err)
-	}
+	// entries, err := os.ReadDir("internal/external/postgresql/migrations")
+	// if err != nil {
+	// 	fmt.Printf("failed ReadDir: %s\n", err)
+	// }
 
-	for _, e := range entries {
-		fmt.Printf("file on  dir internal/external/postgresql/migrations: %s\n", e.Name())
-	}
-
-	entries, err = os.ReadDir("migrations")
-	if err != nil {
-		fmt.Printf("failed ReadDir: %s\n", err)
-	}
-
-	for _, e := range entries {
-		fmt.Printf("file on dir migrations: %s\n", e.Name())
-	}
+	// for _, e := range entries {
+	// 	fmt.Printf("file on  dir internal/external/postgresql/migrations: %s\n", e.Name())
+	// }
 
 	migrationsPath := "internal/external/postgresql/migrations"
 
