@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"os"
 
 	"github.com/Pos-Tech-Challenge-48/delivery-order-api/config"
 	"github.com/golang-migrate/migrate/v4"
@@ -35,7 +36,25 @@ func runMigrations(db *sql.DB) error {
 		return fmt.Errorf("ERROR creating driver instance: %w", err)
 	}
 
-	migrationsPath := "/migrations"
+	entries, err := os.ReadDir("./migrations")
+	if err != nil {
+		fmt.Printf("failed ReadDir: %s\n", err)
+	}
+
+	for _, e := range entries {
+		fmt.Printf("file on  dir ./secrets: %s\n", e.Name())
+	}
+
+	entries, err = os.ReadDir("migrations")
+	if err != nil {
+		fmt.Printf("failed ReadDir: %s\n", err)
+	}
+
+	for _, e := range entries {
+		fmt.Printf("file on dir migrations: %s\n", e.Name())
+	}
+
+	migrationsPath := "migrations"
 
 	fmt.Printf("db: creating migrations %s \n", migrationsPath)
 
