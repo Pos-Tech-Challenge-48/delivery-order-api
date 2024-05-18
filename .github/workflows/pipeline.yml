@@ -80,7 +80,7 @@ jobs:
                 spec:
                   containers:
                     - name: delivery-api-container
-                      image: $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+                      image: ${{ steps.login-ecr.outputs.registry }}/delivery-order-api:${{github.ref_name}}
                       ports:
                         - containerPort: 8080
                       livenessProbe:
