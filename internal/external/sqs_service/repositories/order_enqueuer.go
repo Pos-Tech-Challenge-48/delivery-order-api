@@ -26,8 +26,10 @@ func (c *OrderEnqueuerRepository) FormatOrderMessage(_ context.Context, data *en
 		OrderId:          data.ID,
 		OrderStatus:      data.Status,
 		Amount:           data.Amount,
+		MerchantID:       data.CustomerID,
 		CreatedDate:      data.CreatedDate,
 		LastModifiedDate: data.LastModifiedDate,
+		Email:            "vitorsmap@gmail.com",
 	}, nil
 }
 
@@ -63,7 +65,9 @@ func (c *OrderEnqueuerRepository) SendOrderToProductionQueue(ctx context.Context
 
 	queue := c.queueClient.Queues.OrderProductionQueue
 
-	body, err := json.Marshal(data)
+	orderMessage, _ := c.FormatOrderMessage(ctx, data)
+
+	body, err := json.Marshal(orderMessage)
 
 	if err != nil {
 		return fmt.Errorf("%s -> %w", operation, err)
