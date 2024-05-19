@@ -99,8 +99,14 @@ Para rodar os testes, basta executar:
 make test-report
 ```
 
+O test report é uma maneira de se mostrar graficamente os resultados. O GO não gera um número total de coverage, mas sim arquivo por aquivo.
+
 Resultados e coverage:
 
+![Imagem 1](https://raw.githubusercontent.com/Pos-Tech-Challenge-48/delivery-order-api/main/kubernetes/images/teste_1.png).
+
+
+![Imagem 2](https://raw.githubusercontent.com/Pos-Tech-Challenge-48/delivery-order-api/main/images/teste_2.png).
 
 
 ### Update Swagger
