@@ -103,7 +103,7 @@ O test report é uma maneira de se mostrar graficamente os resultados. O GO não
 
 Resultados e coverage:
 
-![Imagem 1](https://raw.githubusercontent.com/Pos-Tech-Challenge-48/delivery-order-api/main/kubernetes/images/teste_1.png).
+![Imagem 1](https://raw.githubusercontent.com/Pos-Tech-Challenge-48/delivery-order-api/main/images/teste_1.png).
 
 
 ![Imagem 2](https://raw.githubusercontent.com/Pos-Tech-Challenge-48/delivery-order-api/main/images/teste_2.png).
