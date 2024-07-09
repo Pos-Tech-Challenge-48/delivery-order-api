@@ -5,6 +5,7 @@ import "github.com/gin-gonic/gin"
 type Router struct {
 	CustomerCreatorHandler gin.HandlerFunc
 	CustomerGetterHandler  gin.HandlerFunc
+	CustomerDeleteHandler  gin.HandlerFunc
 	OrderCreatorHandler    gin.HandlerFunc
 	OrderGetterHandler     gin.HandlerFunc
 	OrderUpdaterHandler    gin.HandlerFunc
@@ -21,6 +22,7 @@ func (r *Router) Register(app *gin.Engine) {
 		// CUSTOMERS
 		delivery.POST("/customers", r.CustomerCreatorHandler)
 		delivery.GET("/customers", r.CustomerGetterHandler)
+		delivery.DELETE("/customers/:id", r.CustomerDeleteHandler)
 
 		// product routes
 		delivery.POST("/products", r.ProductCreatorHandler)

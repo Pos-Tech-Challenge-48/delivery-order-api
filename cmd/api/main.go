@@ -8,6 +8,7 @@ import (
 
 	"github.com/Pos-Tech-Challenge-48/delivery-order-api/internal/controllers"
 	"github.com/Pos-Tech-Challenge-48/delivery-order-api/internal/controllers/customercreatorhandler"
+	"github.com/Pos-Tech-Challenge-48/delivery-order-api/internal/controllers/customerdeletehandler"
 	customergetterhandler "github.com/Pos-Tech-Challenge-48/delivery-order-api/internal/controllers/customergetterandler"
 	"github.com/Pos-Tech-Challenge-48/delivery-order-api/internal/controllers/ordercreatorhandler"
 	"github.com/Pos-Tech-Challenge-48/delivery-order-api/internal/controllers/ordergetterhandler"
@@ -21,6 +22,7 @@ import (
 	"github.com/Pos-Tech-Challenge-48/delivery-order-api/internal/external/sqs_service"
 	enqueuer_repository "github.com/Pos-Tech-Challenge-48/delivery-order-api/internal/external/sqs_service/repositories"
 	"github.com/Pos-Tech-Challenge-48/delivery-order-api/internal/usecases/customercreator"
+	"github.com/Pos-Tech-Challenge-48/delivery-order-api/internal/usecases/customerdelete"
 	"github.com/Pos-Tech-Challenge-48/delivery-order-api/internal/usecases/customergetter"
 	"github.com/Pos-Tech-Challenge-48/delivery-order-api/internal/usecases/ordercreator"
 	"github.com/Pos-Tech-Challenge-48/delivery-order-api/internal/usecases/ordergetter"
@@ -42,7 +44,6 @@ func main() {
 	config, err := config.LoadConfig()
 	if err != nil {
 		log.Println("error to load config", err)
-
 	}
 	// SQS
 	sqsService, err := sqs_service.New(mainCtx, config.SQSConfig, config.Environment)
@@ -58,6 +59,9 @@ func main() {
 	customerRepository := repositories.NewCustomerRepository(postgres)
 	customerCreator := customercreator.NewCustomerCreator(customerRepository)
 	customerCreatorHandler := customercreatorhandler.NewCustomerCreatorHandler(customerCreator)
+
+	customerDeleteUseCase := customerdelete.NewCustomerDelete(customerRepository)
+	customerDeleteHandler := customerdeletehandler.NewCustomerDeleteHandler(customerDeleteUseCase)
 
 	customerGetter := customergetter.NewCustomerGetter(customerRepository)
 	customerGetterHandler := customergetterhandler.NewCustomerGetterHandler(customerGetter)
@@ -96,6 +100,7 @@ func main() {
 	router := controllers.Router{
 		CustomerCreatorHandler: customerCreatorHandler.Handle,
 		CustomerGetterHandler:  customerGetterHandler.Handle,
+		CustomerDeleteHandler:  customerDeleteHandler.Handle,
 		OrderCreatorHandler:    orderCreatorHandler.Handle,
 		OrderGetterHandler:     orderGetterHandler.Handle,
 		OrderUpdaterHandler:    orderUpdaterHandler.Handle,
