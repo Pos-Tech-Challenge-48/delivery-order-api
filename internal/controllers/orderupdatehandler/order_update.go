@@ -31,7 +31,7 @@ func NewOrderUpdaterHandler(OrderUpdaterUseCase interfaces.OrderUpdater) *OrderU
 // @Success 200
 // @Failure 400 {string} message  "invalid request"
 // @Failure 500 {string} message  "general error"
-// @Router /orders/:order_id [patch]
+// @Router /orders/{order_id} [patch]
 func (h *OrderUpdaterHandler) Handle(c *gin.Context) {
 	orderID := c.Param("order_id")
 

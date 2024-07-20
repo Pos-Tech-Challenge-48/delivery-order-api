@@ -32,9 +32,18 @@ import (
 
 	"github.com/gin-gonic/gin"
 
+	_ "github.com/Pos-Tech-Challenge-48/delivery-order-api/cmd/api/docs"
 	"github.com/Pos-Tech-Challenge-48/delivery-order-api/config"
+
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
+// @title				CS-EVENTS-API
+// @version			1.0
+// @description Aplicativo que gerencia atividades de um serviço de pedidos em um restaurante. Desde a base de clientes, catálogo de produtos, pedidos e fila de preparo
+// @host				http://localhost:8081
+// @BasePath /v1/delivery
 func main() {
 	mainCtx := context.Background()
 	fmt.Print("I AM MAIN")
@@ -93,6 +102,24 @@ func main() {
 
 	app := gin.Default()
 
+	// Setup Security Headers
+	app.Use(func(c *gin.Context) {
+		c.Header("X-Frame-Options", "DENY")
+		c.Header("X-Content-Type-Options", "nosniff")
+		c.Header("Permissions-Policy", "geolocation=(), camera=(), microphone=()")
+
+		// Enable swagger for local environment
+		if config.Environment.Name == "production" {
+			c.Header("Content-Security-Policy", "default-src 'self'; script-src 'self' http://localhost:8081; style-src 'self' https://cdn.jsdelivr.net/npm/swagger-ui-dist@4/swagger-ui.css;; img-src 'self' data:; frame-ancestors 'none'; form-action 'self'")
+		}
+
+		if c.Request.URL.Path != "/swagger/*any" {
+			// Set Content-Type to application/json for API responses
+			c.Writer.Header().Set("Content-Type", "application/json")
+		}
+		c.Next()
+	})
+
 	router := controllers.Router{
 		CustomerCreatorHandler: customerCreatorHandler.Handle,
 		CustomerGetterHandler:  customerGetterHandler.Handle,
@@ -110,6 +137,8 @@ func main() {
 	app.GET("/healthcheck", func(c *gin.Context) {
 		c.Status(http.StatusOK)
 	})
+
+	app.GET("swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	app.Run(":8080")
 }
