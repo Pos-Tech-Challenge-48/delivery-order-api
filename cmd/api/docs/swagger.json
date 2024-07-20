@@ -6,7 +6,7 @@
         "contact": {},
         "version": "1.0"
     },
-    "host": "localhost:8081",
+    "host": "http://localhost:8081",
     "basePath": "/v1/delivery",
     "paths": {
         "/customer": {
@@ -80,6 +80,46 @@
                     },
                     "400": {
                         "description": "invalid document, invalid email...",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "general error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/customers/data_removal_request": {
+            "post": {
+                "description": "save customerdataremoval in DB",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "customer"
+                ],
+                "summary": "create customerdataremoval",
+                "parameters": [
+                    {
+                        "description": "CustomerDataRemovalRequest",
+                        "name": "customerdataremoval",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Pos-Tech-Challenge-48_delivery-order-api_internal_entities.CustomerDataRemovalRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created"
+                    },
+                    "400": {
+                        "description": "invalid customer data removal",
                         "schema": {
                             "type": "string"
                         }
@@ -411,6 +451,32 @@
                     "type": "string"
                 },
                 "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_Pos-Tech-Challenge-48_delivery-order-api_internal_entities.CustomerDataRemovalRequest": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "created_date_db": {
+                    "type": "string"
+                },
+                "document": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "last_modified_date_db": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "phonenumber": {
                     "type": "string"
                 }
             }

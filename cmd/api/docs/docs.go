@@ -99,6 +99,46 @@ const docTemplate = `{
                 }
             }
         },
+        "/customers/data_removal_request": {
+            "post": {
+                "description": "save customerdataremoval in DB",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "customer"
+                ],
+                "summary": "create customerdataremoval",
+                "parameters": [
+                    {
+                        "description": "CustomerDataRemovalRequest",
+                        "name": "customerdataremoval",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Pos-Tech-Challenge-48_delivery-order-api_internal_entities.CustomerDataRemovalRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created"
+                    },
+                    "400": {
+                        "description": "invalid customer data removal",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "general error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/orders": {
             "get": {
                 "description": "Get Order from DB",
@@ -421,6 +461,32 @@ const docTemplate = `{
                 }
             }
         },
+        "github_com_Pos-Tech-Challenge-48_delivery-order-api_internal_entities.CustomerDataRemovalRequest": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "created_date_db": {
+                    "type": "string"
+                },
+                "document": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "last_modified_date_db": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "phonenumber": {
+                    "type": "string"
+                }
+            }
+        },
         "github_com_Pos-Tech-Challenge-48_delivery-order-api_internal_entities.Order": {
             "type": "object",
             "properties": {
@@ -496,7 +562,7 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
-	Host:             "localhost:8081",
+	Host:             "http://localhost:8081",
 	BasePath:         "/v1/delivery",
 	Schemes:          []string{},
 	Title:            "CS-EVENTS-API",

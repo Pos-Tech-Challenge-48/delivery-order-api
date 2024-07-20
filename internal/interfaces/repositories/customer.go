@@ -12,3 +12,7 @@ type CustomerRepository interface {
 	GetByDocument(ctx context.Context, document string) (*entities.Customer, error)
 	GetByDocumentAndEmail(ctx context.Context, document string, email string) (*entities.Customer, error)
 }
+
+type CustomerDataRemovalRepository interface {
+	Save(ctx context.Context, data *entities.CustomerDataRemovalRequest) error
+}
