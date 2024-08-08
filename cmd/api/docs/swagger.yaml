@@ -1,0 +1,321 @@
+basePath: /v1/delivery
+definitions:
+  github_com_Pos-Tech-Challenge-48_delivery-order-api_internal_entities.Customer:
+    properties:
+      created_date:
+        type: string
+      document:
+        type: string
+      email:
+        type: string
+      id:
+        type: string
+      last_modified_date:
+        type: string
+      name:
+        type: string
+    type: object
+  github_com_Pos-Tech-Challenge-48_delivery-order-api_internal_entities.Order:
+    properties:
+      amount:
+        type: number
+      created_date_db:
+        type: string
+      customer_id:
+        type: string
+      id:
+        type: string
+      last_modified_date_db:
+        type: string
+      products:
+        items:
+          $ref: '#/definitions/github_com_Pos-Tech-Challenge-48_delivery-order-api_internal_entities.OrderProduct'
+        type: array
+      status:
+        type: string
+    type: object
+  github_com_Pos-Tech-Challenge-48_delivery-order-api_internal_entities.OrderProduct:
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+    type: object
+  github_com_Pos-Tech-Challenge-48_delivery-order-api_internal_entities.Product:
+    properties:
+      category:
+        type: string
+      created_date_db:
+        type: string
+      description:
+        type: string
+      id:
+        type: string
+      image:
+        type: string
+      last_modified_date_db:
+        type: string
+      name:
+        type: string
+      price:
+        type: number
+    type: object
+host: localhost:8081
+info:
+  contact: {}
+  description: Aplicativo que gerencia atividades de um serviço de pedidos em um restaurante.
+    Desde a base de clientes, catálogo de produtos, pedidos e fila de preparo
+  title: CS-EVENTS-API
+  version: "1.0"
+paths:
+  /customer:
+    get:
+      parameters:
+      - description: Document
+        in: query
+        name: document
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Customer
+          schema:
+            $ref: '#/definitions/github_com_Pos-Tech-Challenge-48_delivery-order-api_internal_entities.Customer'
+        "400":
+          description: invalid document
+          schema:
+            type: string
+        "404":
+          description: customer not find
+          schema:
+            type: string
+        "500":
+          description: general error
+          schema:
+            type: string
+      summary: get customer by document
+      tags:
+      - customer
+    post:
+      description: save customer in DB
+      parameters:
+      - description: Customer
+        in: body
+        name: customer
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_Pos-Tech-Challenge-48_delivery-order-api_internal_entities.Customer'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+        "400":
+          description: invalid document, invalid email...
+          schema:
+            type: string
+        "500":
+          description: general error
+          schema:
+            type: string
+      summary: create customer
+      tags:
+      - customer
+  /orders:
+    get:
+      description: Get Order from DB
+      parameters:
+      - description: Sort orders by status
+        in: query
+        name: sortBy
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Order
+          schema:
+            items:
+              $ref: '#/definitions/github_com_Pos-Tech-Challenge-48_delivery-order-api_internal_entities.Order'
+            type: array
+        "400":
+          description: invalid document
+          schema:
+            type: string
+        "404":
+          description: customer not find
+          schema:
+            type: string
+        "500":
+          description: general error
+          schema:
+            type: string
+      summary: get all order
+      tags:
+      - order
+    post:
+      description: save Order in DB
+      parameters:
+      - description: Order
+        in: body
+        name: Order
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_Pos-Tech-Challenge-48_delivery-order-api_internal_entities.Order'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+        "400":
+          description: invalid request
+          schema:
+            type: string
+        "500":
+          description: general error
+          schema:
+            type: string
+      summary: create order
+      tags:
+      - order
+  /orders/{order_id}:
+    patch:
+      description: update Order in DB
+      parameters:
+      - description: Order ID
+        in: path
+        name: order_id
+        required: true
+        type: string
+      - description: Order
+        in: body
+        name: Order
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_Pos-Tech-Challenge-48_delivery-order-api_internal_entities.Order'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: invalid request
+          schema:
+            type: string
+        "500":
+          description: general error
+          schema:
+            type: string
+      summary: update Order
+      tags:
+      - order
+  /products:
+    delete:
+      description: delete product in DB
+      parameters:
+      - description: Product
+        in: body
+        name: product
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_Pos-Tech-Challenge-48_delivery-order-api_internal_entities.Product'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: invalid request
+          schema:
+            type: string
+        "500":
+          description: general error
+          schema:
+            type: string
+      summary: delete product
+      tags:
+      - product
+    get:
+      parameters:
+      - description: Category
+        in: query
+        name: category
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Product
+          schema:
+            items:
+              $ref: '#/definitions/github_com_Pos-Tech-Challenge-48_delivery-order-api_internal_entities.Product'
+            type: array
+        "400":
+          description: invalid document
+          schema:
+            type: string
+        "404":
+          description: customer not find
+          schema:
+            type: string
+        "500":
+          description: general error
+          schema:
+            type: string
+      summary: get product by category
+      tags:
+      - product
+    post:
+      description: save product in DB
+      parameters:
+      - description: Product
+        in: body
+        name: product
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_Pos-Tech-Challenge-48_delivery-order-api_internal_entities.Product'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: invalid request
+          schema:
+            type: string
+        "500":
+          description: general error
+          schema:
+            type: string
+      summary: create product
+      tags:
+      - product
+    put:
+      description: update product in DB
+      parameters:
+      - description: Product
+        in: body
+        name: product
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_Pos-Tech-Challenge-48_delivery-order-api_internal_entities.Product'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: invalid request
+          schema:
+            type: string
+        "500":
+          description: general error
+          schema:
+            type: string
+      summary: update product
+      tags:
+      - product
+swagger: "2.0"

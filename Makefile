@@ -1,6 +1,6 @@
 include .env
 
-
+current_dir = $(shell pwd)
 
 start-dev:
 	docker compose --profile full up
@@ -26,3 +26,14 @@ migrate-down:
 
 test-report:
 	go test ./... -v -cover  -coverprofile=c.out && go tool cover -html=c.out
+
+# OWASP ZAP RESPONSE
+zap-scan:
+	docker run --user root --network host -v ${current_dir}:/zap/wrk/:rw -t zaproxy/zap-stable zap-api-scan.py -t http://localhost:8081/swagger/index.html -f openapi -r reportfix.html  -g zap_config && docker rm zap
+
+zap-scan-products:
+	docker run --user root --network host -v ${current_dir}:/zap/wrk/:rw -t zaproxy/zap-stable zap-api-scan.py -t http://localhost:8081/v1/delivery/products -f openapi -r reportfix_products.html  -g zap_config && docker rm zap
+
+zap-scan-orders:
+	docker run --user root --network host -v ${current_dir}:/zap/wrk/:rw -t zaproxy/zap-stable zap-api-scan.py -t http://localhost:8081/v1/delivery/orders -f openapi -r reportfix_orders.html  -g zap_config && docker rm zap
+
