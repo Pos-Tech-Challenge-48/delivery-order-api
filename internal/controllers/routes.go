@@ -5,16 +5,16 @@ import (
 )
 
 type Router struct {
-	CustomerCreatorHandler gin.HandlerFunc
-	CustomerGetterHandler  gin.HandlerFunc
-	CustomerDeleteHandler  gin.HandlerFunc
-	OrderCreatorHandler    gin.HandlerFunc
-	OrderGetterHandler     gin.HandlerFunc
-	OrderUpdaterHandler    gin.HandlerFunc
-	ProductCreatorHandler  gin.HandlerFunc
-	ProductDeleteHandler   gin.HandlerFunc
-	ProductUpdateHandler   gin.HandlerFunc
-	ProductGetterHandler   gin.HandlerFunc
+	CustomerCreatorHandler            gin.HandlerFunc
+	CustomerGetterHandler             gin.HandlerFunc
+	OrderCreatorHandler               gin.HandlerFunc
+	OrderGetterHandler                gin.HandlerFunc
+	OrderUpdaterHandler               gin.HandlerFunc
+	ProductCreatorHandler             gin.HandlerFunc
+	ProductDeleteHandler              gin.HandlerFunc
+	ProductUpdateHandler              gin.HandlerFunc
+	ProductGetterHandler              gin.HandlerFunc
+	CustomerDataRemovalRequestHandler gin.HandlerFunc
 }
 
 func (r *Router) Register(app *gin.Engine) {
@@ -24,7 +24,7 @@ func (r *Router) Register(app *gin.Engine) {
 		// CUSTOMERS
 		delivery.POST("/customers", r.CustomerCreatorHandler)
 		delivery.GET("/customers", r.CustomerGetterHandler)
-		delivery.DELETE("/customers/:id", r.CustomerDeleteHandler)
+		delivery.POST("/customers/data_removal_request", r.CustomerDataRemovalRequestHandler)
 
 		// product routes
 		delivery.POST("/products", r.ProductCreatorHandler)

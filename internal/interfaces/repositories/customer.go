@@ -14,3 +14,7 @@ type CustomerRepository interface {
 	Delete(ctx context.Context, ID string) error
 	GetByID(ctx context.Context, ID string) (*entities.Customer, error)
 }
+
+type CustomerDataRemovalRepository interface {
+	Save(ctx context.Context, data *entities.CustomerDataRemovalRequest) error
+}

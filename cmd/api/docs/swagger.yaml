@@ -15,6 +15,23 @@ definitions:
       name:
         type: string
     type: object
+  github_com_Pos-Tech-Challenge-48_delivery-order-api_internal_entities.CustomerDataRemovalRequest:
+    properties:
+      address:
+        type: string
+      created_date_db:
+        type: string
+      document:
+        type: string
+      id:
+        type: string
+      last_modified_date_db:
+        type: string
+      name:
+        type: string
+      phonenumber:
+        type: string
+    type: object
   github_com_Pos-Tech-Challenge-48_delivery-order-api_internal_entities.Order:
     properties:
       amount:
@@ -60,7 +77,7 @@ definitions:
       price:
         type: number
     type: object
-host: localhost:8081
+host: http://localhost:8081
 info:
   contact: {}
   description: Aplicativo que gerencia atividades de um serviço de pedidos em um restaurante.
@@ -121,6 +138,32 @@ paths:
           schema:
             type: string
       summary: create customer
+      tags:
+      - customer
+  /customers/data_removal_request:
+    post:
+      description: save customerdataremoval in DB
+      parameters:
+      - description: CustomerDataRemovalRequest
+        in: body
+        name: customerdataremoval
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_Pos-Tech-Challenge-48_delivery-order-api_internal_entities.CustomerDataRemovalRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+        "400":
+          description: invalid customer data removal
+          schema:
+            type: string
+        "500":
+          description: general error
+          schema:
+            type: string
+      summary: create customerdataremoval
       tags:
       - customer
   /orders:

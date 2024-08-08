@@ -8,7 +8,7 @@ import (
 
 	"github.com/Pos-Tech-Challenge-48/delivery-order-api/internal/controllers"
 	"github.com/Pos-Tech-Challenge-48/delivery-order-api/internal/controllers/customercreatorhandler"
-	"github.com/Pos-Tech-Challenge-48/delivery-order-api/internal/controllers/customerdeletehandler"
+	"github.com/Pos-Tech-Challenge-48/delivery-order-api/internal/controllers/customerdataremovalhandler"
 	customergetterhandler "github.com/Pos-Tech-Challenge-48/delivery-order-api/internal/controllers/customergetterandler"
 	"github.com/Pos-Tech-Challenge-48/delivery-order-api/internal/controllers/ordercreatorhandler"
 	"github.com/Pos-Tech-Challenge-48/delivery-order-api/internal/controllers/ordergetterhandler"
@@ -22,7 +22,7 @@ import (
 	"github.com/Pos-Tech-Challenge-48/delivery-order-api/internal/external/sqs_service"
 	enqueuer_repository "github.com/Pos-Tech-Challenge-48/delivery-order-api/internal/external/sqs_service/repositories"
 	"github.com/Pos-Tech-Challenge-48/delivery-order-api/internal/usecases/customercreator"
-	"github.com/Pos-Tech-Challenge-48/delivery-order-api/internal/usecases/customerdelete"
+	"github.com/Pos-Tech-Challenge-48/delivery-order-api/internal/usecases/customerdataremovalcreator"
 	"github.com/Pos-Tech-Challenge-48/delivery-order-api/internal/usecases/customergetter"
 	"github.com/Pos-Tech-Challenge-48/delivery-order-api/internal/usecases/ordercreator"
 	"github.com/Pos-Tech-Challenge-48/delivery-order-api/internal/usecases/ordergetter"
@@ -104,6 +104,11 @@ func main() {
 	orderUpdater := orderupdater.NewOrderUpdater(orderRepository, orderEnqueuerRepository)
 	orderUpdaterHandler := orderupdatehandler.NewOrderUpdaterHandler(orderUpdater)
 
+	// CUSTOMER DATA REMOVAL
+	customerDataRemovalRepository := repositories.NewCustomerDataRemovalRepository(postgres)
+	dataRemovalCreator := customerdataremovalcreator.NewCustomerDataRemovalCreator(customerDataRemovalRepository)
+	customerDataRemovalCreatorHandler := customerdataremovalhandler.NewCustomerDataRemovalRequestHandler(dataRemovalCreator)
+
 	app := gin.Default()
 
 	// Setup Security Headers
@@ -125,16 +130,16 @@ func main() {
 	})
 
 	router := controllers.Router{
-		CustomerCreatorHandler: customerCreatorHandler.Handle,
-		CustomerGetterHandler:  customerGetterHandler.Handle,
-		CustomerDeleteHandler:  customerDeleteHandler.Handle,
-		OrderCreatorHandler:    orderCreatorHandler.Handle,
-		OrderGetterHandler:     orderGetterHandler.Handle,
-		OrderUpdaterHandler:    orderUpdaterHandler.Handle,
-		ProductCreatorHandler:  productCreatorHandler.Handle,
-		ProductDeleteHandler:   productDeleteHandler.Handle,
-		ProductUpdateHandler:   productUpdateHandler.Handle,
-		ProductGetterHandler:   productGetterHandler.Handle,
+		CustomerCreatorHandler:            customerCreatorHandler.Handle,
+		CustomerGetterHandler:             customerGetterHandler.Handle,
+		OrderCreatorHandler:               orderCreatorHandler.Handle,
+		OrderGetterHandler:                orderGetterHandler.Handle,
+		OrderUpdaterHandler:               orderUpdaterHandler.Handle,
+		ProductCreatorHandler:             productCreatorHandler.Handle,
+		ProductDeleteHandler:              productDeleteHandler.Handle,
+		ProductUpdateHandler:              productUpdateHandler.Handle,
+		ProductGetterHandler:              productGetterHandler.Handle,
+		CustomerDataRemovalRequestHandler: customerDataRemovalCreatorHandler.Handle,
 	}
 
 	router.Register(app)
