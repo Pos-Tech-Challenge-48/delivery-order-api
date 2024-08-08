@@ -12,7 +12,7 @@ import (
 	context "context"
 	reflect "reflect"
 
-	"github.com/Pos-Tech-Challenge-48/delivery-order-api/internal/entities"
+	entities "github.com/Pos-Tech-Challenge-48/delivery-order-api/internal/entities"
 	gomock "go.uber.org/mock/gomock"
 )
 
@@ -37,6 +37,20 @@ func NewMockCustomerRepository(ctrl *gomock.Controller) *MockCustomerRepository 
 // EXPECT returns an object that allows the caller to indicate expected use.
 func (m *MockCustomerRepository) EXPECT() *MockCustomerRepositoryMockRecorder {
 	return m.recorder
+}
+
+// Delete mocks base method.
+func (m *MockCustomerRepository) Delete(ctx context.Context, ID string) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Delete", ctx, ID)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Delete indicates an expected call of Delete.
+func (mr *MockCustomerRepositoryMockRecorder) Delete(ctx, ID any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockCustomerRepository)(nil).Delete), ctx, ID)
 }
 
 // GetByDocument mocks base method.
@@ -67,6 +81,21 @@ func (m *MockCustomerRepository) GetByDocumentAndEmail(ctx context.Context, docu
 func (mr *MockCustomerRepositoryMockRecorder) GetByDocumentAndEmail(ctx, document, email any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetByDocumentAndEmail", reflect.TypeOf((*MockCustomerRepository)(nil).GetByDocumentAndEmail), ctx, document, email)
+}
+
+// GetByID mocks base method.
+func (m *MockCustomerRepository) GetByID(ctx context.Context, ID string) (*entities.Customer, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetByID", ctx, ID)
+	ret0, _ := ret[0].(*entities.Customer)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetByID indicates an expected call of GetByID.
+func (mr *MockCustomerRepositoryMockRecorder) GetByID(ctx, ID any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetByID", reflect.TypeOf((*MockCustomerRepository)(nil).GetByID), ctx, ID)
 }
 
 // Save mocks base method.

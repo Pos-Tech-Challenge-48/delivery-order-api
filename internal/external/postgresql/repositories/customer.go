@@ -86,3 +86,38 @@ func (r *CustomerRepository) GetByDocumentAndEmail(ctx context.Context, document
 	}
 	return customer, nil
 }
+
+func (r *CustomerRepository) GetByID(ctx context.Context, ID string) (*entities.Customer, error) {
+	query := `
+        SELECT customer_id, customer_name, customer_email, customer_document, created_date_db, last_modified_date_db
+        FROM customer
+        WHERE customer_id = $1
+    `
+	row := r.db.QueryRow(query, ID)
+
+	customer := &entities.Customer{}
+	err := row.Scan(
+		&customer.ID,
+		&customer.Name,
+		&customer.Email,
+		&customer.Document,
+		&customer.CreatedDate,
+		&customer.LastModifiedDate,
+	)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, nil
+		}
+		return nil, err
+	}
+	return customer, nil
+}
+
+func (r *CustomerRepository) Delete(ctx context.Context, ID string) error {
+	query := `
+        DELETE FROM customer
+        WHERE customer_id = $1
+    `
+	_, err := r.db.Exec(query, ID)
+	return err
+}

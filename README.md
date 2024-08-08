@@ -121,3 +121,13 @@ swag init -g ./cmd/api/main.go -o ./cmd/api/docs --parseDependency
 ### Kubernetes
 
 A documentação do kubernetes pode ser acessada [aqui](https://github.com/Pos-Tech-Challenge-48/delivery-api/tree/main/kubernetes).
+
+
+### Padrão Saga
+
+- O padrão saga que escolhemos foi uma SAGA <b>coreografada</b> como podem ver no desenho abaixo:
+
+![Imagem 3](/images/delivery.drawio_1.png).
+
+- O principal motivo que escolhemos essa SAGA pensando principamente na simplicidade que ela oferece, para realizar o fluxo de pedido com pagamento e avisando o restaurante que ocorreu, colocamos apenas 2 eventos via SQS, por conta disso um orquestrador para apenas duas filas acreditamos que seja overengineering.
+- Mas entendemos que a partir do momento que esse fluxo pode crescer, pode ficar mais complexo de manter com varios pontos para se ficar de olho em caso de erro.

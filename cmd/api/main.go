@@ -53,7 +53,6 @@ func main() {
 	config, err := config.LoadConfig()
 	if err != nil {
 		log.Println("error to load config", err)
-
 	}
 	// SQS
 	sqsService, err := sqs_service.New(mainCtx, config.SQSConfig, config.Environment)
@@ -69,6 +68,9 @@ func main() {
 	customerRepository := repositories.NewCustomerRepository(postgres)
 	customerCreator := customercreator.NewCustomerCreator(customerRepository)
 	customerCreatorHandler := customercreatorhandler.NewCustomerCreatorHandler(customerCreator)
+
+	customerDeleteUseCase := customerdelete.NewCustomerDelete(customerRepository)
+	customerDeleteHandler := customerdeletehandler.NewCustomerDeleteHandler(customerDeleteUseCase)
 
 	customerGetter := customergetter.NewCustomerGetter(customerRepository)
 	customerGetterHandler := customergetterhandler.NewCustomerGetterHandler(customerGetter)
